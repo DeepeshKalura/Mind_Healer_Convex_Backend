@@ -10,6 +10,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "convex": "^1.9.1"
-  }
+    "convex": "^1.9.1",
+    "dotenv": "^16.4.5"
+  },
+  "type": "module"
 }

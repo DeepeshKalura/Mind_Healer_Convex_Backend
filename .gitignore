@@ -1,0 +1,9 @@
+# Virtual Environements
+.venv
+node_modules
+# Visual Studio Code
+.vscode
+
+# environment file
+.env
+

@@ -1,17 +1,18 @@
-// I have to create the all the functionality that required by applications to run 
 import express from 'express';
+import * as dotenv from "dotenv";
+import bodyParser from 'body-parser';
+
+import { api } from './convex/_generated/api.js';
+import { ConvexHttpClient } from "convex/browser";
 
 const app = express()
-
-import * as dotenv from "dotenv";
-import { ConvexHttpClient } from "convex/browser";
 dotenv.config({ path: ".env.local" });
 
 
 const client = new ConvexHttpClient(process.env["CONVEX_URL"]);
 
 app.listen(3001);
-
+app.use(bodyParser.json());
 
 // Implement the html template that makes it look good
 app.get('/', (req, res) => {
@@ -19,10 +20,33 @@ app.get('/', (req, res) => {
 });
 
 
-import { api } from './convex/_generated/api.js';
-// for writing in the users
-// client.mutation(api.user.createUser, { email: "xyz@123", name: "xyz", password: "123" }).then(console.log)
+app.post("/users", async (req, res) => {
+    const { name } = req.body;
+    if (!name) {
+        return res.status(400).json({ error: 'name is required' });
+    }
+    const userId = await client.mutation(api.user.createUser, { name: name })
 
-//  for reading the users
-const id = "jd7ch1w7gy5r3p292dgcx3shw16kxntd";
-client.query(api.user.getUserWithId, { id: id }).then(console.log)
+    if (!userId) {
+        res.status(500).json({ error: 'something went wrong' });
+    }
+
+    res.status(201).json({ id: userId });
+
+});
+
+app.get("/users/:id", async (req, res) => {
+    const { id } = req.params;
+    const user = await client.query(api.user.getUserWithId, { id: id });
+    if (!user) {
+        return res.status(404).json({ error: 'user not found' });
+    }
+
+    res.json(user);
+});
+
+app.delete("/users/:id", async (req, res) => {
+    const { id } = req.params;
+    await client.mutation(api.user.deleteUser, { id: id });
+    res.status(200).send();
+});

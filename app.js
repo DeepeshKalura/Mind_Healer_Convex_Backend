@@ -14,7 +14,6 @@ const client = new ConvexHttpClient(process.env["CONVEX_URL"]);
 app.listen(3001);
 app.use(bodyParser.json());
 
-// Implement the html template that makes it look good
 app.get('/', (req, res) => {
     res.send('Hello I am in the first page hit')
 });
@@ -50,3 +49,8 @@ app.delete("/users/:id", async (req, res) => {
     await client.mutation(api.user.deleteUser, { id: id });
     res.status(200).send();
 });
+
+
+
+
+

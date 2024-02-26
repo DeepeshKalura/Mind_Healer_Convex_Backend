@@ -14,6 +14,8 @@ import type {
   FilterApi,
   FunctionReference,
 } from "convex/server";
+import type * as meterics from "../meterics.js";
+import type * as session from "../session.js";
 import type * as user from "../user.js";
 
 /**
@@ -25,6 +27,8 @@ import type * as user from "../user.js";
  * ```
  */
 declare const fullApi: ApiFromModules<{
+  meterics: typeof meterics;
+  session: typeof session;
   user: typeof user;
 }>;
 export declare const api: FilterApi<

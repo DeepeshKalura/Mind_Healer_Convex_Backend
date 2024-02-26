@@ -1,4 +1,4 @@
-import { mutation, query } from "./_generated/server.js";
+import { mutation } from "./_generated/server.js";
 import { v } from "convex/values";
 
 

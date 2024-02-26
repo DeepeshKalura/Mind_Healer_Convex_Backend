@@ -86,6 +86,9 @@ app.patch("/sessions/:id", async (req, res) => {
 });
 
 
+app.get("/meterics/:id", async (req, res) => {
+    var { id } = req.params;
 
+});
 
 

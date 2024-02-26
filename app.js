@@ -50,6 +50,41 @@ app.delete("/users/:id", async (req, res) => {
     res.status(200).send();
 });
 
+app.post("/sessions", async (req, res) => {
+    const { id } = req.body;
+    if (!id) {
+        return res.status(400).json({ error: 'id is required' });
+    }
+    const sessionId = await client.mutation(api.session.createNewSession, { id: id });
+
+    if (!sessionId) {
+        res.status(500).json({ error: 'something went wrong' });
+    }
+
+    res.status(201).json({ id: sessionId });
+});
+
+app.post("/sessions/thread/", async (req, res) => {
+    const { id, message, response, sentiment_compound } = req.body;
+    if (!id || !message || !response || !sentiment_compound) {
+        return res.status(400).json({ error: 'id, message, response, sentiment_compound are required' });
+    }
+    await client.mutation(api.session.createdNewThread, { id: id, message: message, response: response, sentiment_compound: sentiment_compound });
+    res.status(201).send();
+});
+
+app.patch("/sessions/thread/:id", async (req, res) => {
+    const { id } = req.params;
+    await client.mutation(api.session.sessionEnded, { id: id });
+    res.status(200).send();
+});
+
+app.patch("/sessions/:id", async (req, res) => {
+    const { id } = req.params;
+    await client.mutation(api.session.updateLastTime, { id: id });
+    res.status(200).send();
+});
+
 
 
 

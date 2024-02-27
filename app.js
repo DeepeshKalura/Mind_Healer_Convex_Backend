@@ -64,18 +64,21 @@ app.post("/sessions", async (req, res) => {
     res.status(201).json({ id: sessionId });
 });
 
-app.post("/sessions/thread/", async (req, res) => {
-    const { id, message, response, sentiment_compound } = req.body;
+app.post("/sessions/threads/:id", async (req, res) => {
+    var { message, response, sentiment_compound } = req.body;
+    const { id } = req.params;
+    sentiment_compound = parseFloat(sentiment_compound);
     if (!id || !message || !response || !sentiment_compound) {
         return res.status(400).json({ error: 'id, message, response, sentiment_compound are required' });
     }
-    await client.mutation(api.session.createdNewThread, { id: id, message: message, response: response, sentiment_compound: sentiment_compound });
-    res.status(201).send();
+    const des = await client.mutation(api.session.createdNewThread, { id: id, message: message, response: response, sentiment_compound: sentiment_compound });
+    console.log(des);
+    res.json({ decorative: des });
 });
 
-app.patch("/sessions/thread/:id", async (req, res) => {
+app.patch("/sessions/threads/:id", async (req, res) => {
     const { id } = req.params;
-    await client.mutation(api.session.sessionEnded, { id: id });
+    const value = await client.mutation(api.session.sessionEnded, { id: id });
     res.status(200).send();
 });
 

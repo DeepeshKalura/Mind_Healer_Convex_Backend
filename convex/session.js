@@ -26,12 +26,14 @@ export const createdNewThread = mutation({
         sentiment_compound: v.float64(),
     },
     handler: async (ctx, args) => {
-        const user = await ctx.db.insert("threads", {
+        const thread_id = await ctx.db.insert("threads", {
             session_id: args.id,
             message: args.message,
             response: args.response,
             sentiment_compound: args.sentiment_compound,
         });
+        console.log(thread_id);
+        return thread_id;
     }
 });
 

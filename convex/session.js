@@ -33,7 +33,8 @@ export const createdNewThread = mutation({
             sentiment_compound: args.sentiment_compound,
         });
         console.log(thread_id);
-        return thread_id;
+        const thread = await ctx.db.get(thread_id);
+        return thread;
     }
 });
 

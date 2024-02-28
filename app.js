@@ -71,9 +71,9 @@ app.post("/sessions/threads/:id", async (req, res) => {
     if (!id || !message || !response || !sentiment_compound) {
         return res.status(400).json({ error: 'id, message, response, sentiment_compound are required' });
     }
-    const des = await client.mutation(api.session.createdNewThread, { id: id, message: message, response: response, sentiment_compound: sentiment_compound });
-    console.log(des);
-    res.json({ decorative: des });
+    const result = await client.mutation(api.session.createdNewThread, { id: id, message: message, response: response, sentiment_compound: sentiment_compound });
+    console.log(result);
+    res.json(result);
 });
 
 app.patch("/sessions/threads/:id", async (req, res) => {

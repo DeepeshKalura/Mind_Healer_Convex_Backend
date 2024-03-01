@@ -64,11 +64,9 @@ app.post("/sessions", async (req, res) => {
     res.status(201).json({ id: sessionId });
 });
 
-app.post("/sessions/threads/:id", async (req, res) => {
-    var { message, response, sentiment_compound } = req.body;
-    const { id } = req.params;
-    sentiment_compound = parseFloat(sentiment_compound);
-    if (!id || !message || !response || !sentiment_compound) {
+app.post("/sessions/threads/", async (req, res) => {
+    const { id, message, response, sentiment_compound } = req.body;
+    if (!id || !message || !response || typeof sentiment_compound === 'undefined') {
         return res.status(400).json({ error: 'id, message, response, sentiment_compound are required' });
     }
     const result = await client.mutation(api.session.createdNewThread, { id: id, message: message, response: response, sentiment_compound: sentiment_compound });

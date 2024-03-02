@@ -92,4 +92,9 @@ app.get("/meterics/:id", async (req, res) => {
 
 });
 
+app.get("/sessions/:id", async (req, res) => {
+    const { id } = req.params;
+    const result = await client.query(api.session.allSessionForUser, { id: id });
+    res.json(result);
+});
 

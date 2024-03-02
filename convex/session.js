@@ -1,6 +1,23 @@
-import { mutation } from "./_generated/server.js";
+import { mutation, query } from "./_generated/server.js";
 import { v } from "convex/values";
 
+export const allSessionForUser = query({
+    args: {
+        id: v.id('users'),
+    },
+    handler: async (ctx, args) => {
+        const session_list = (await ctx.db.query("sessions").filter(q => q.eq(q.field("userId"), args.id)).collect());
+        let session_id_list = []
+        for (let i = 0; i < session_list.length; i++) {
+            // console.log(session_list[i]._id);
+            const data = {
+                "id": session_list[i]._id
+            }
+            session_id_list.push(data);
+        }
+        return session_id_list;
+    }
+});
 
 export const createNewSession = mutation({
     args: {
@@ -15,7 +32,7 @@ export const createNewSession = mutation({
         });
         return sessionId;
     }
-})
+});
 
 
 export const createdNewThread = mutation({
